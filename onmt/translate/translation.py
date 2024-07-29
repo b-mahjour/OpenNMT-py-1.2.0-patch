@@ -94,10 +94,10 @@ class TranslationBuilder(object):
                 new_preds.append(fake_ar)
                 new_attn.append(fake_ar)
                 new_pred_score.append([0 for x in fake_ar])
-        else:
-            new_preds.append(preds[b])
-            new_attn.append(attn[b])
-            new_pred_score.append(pred_score[b])
+            else:
+                new_preds.append(preds[b])
+                new_attn.append(attn[b])
+                new_pred_score.append(pred_score[b])
 
         preds = tuple(new_preds)
         attn = tuple(new_attn)
