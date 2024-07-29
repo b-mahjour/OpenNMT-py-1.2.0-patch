@@ -81,6 +81,29 @@ class TranslationBuilder(object):
         if not any(align):  # when align is a empty nested list
             align = [None] * batch_size
 
+        # patch for when output is empty
+        new_preds = []
+        new_attn = []
+        new_pred_score = []
+        for b in range(batch_size):
+            if len(preds[b]) != self.n_best:
+                fake_ar = []
+                for ii in range(self.n_best):
+                    fake_ar.append([3])
+
+                new_preds.append(fake_ar)
+                new_attn.append(fake_ar)
+                new_pred_score.append([0 for x in fake_ar])
+        else:
+            new_preds.append(preds[b])
+            new_attn.append(attn[b])
+            new_pred_score.append(pred_score[b])
+
+        preds = tuple(new_preds)
+        attn = tuple(new_attn)
+        pred_score = tuple(new_pred_score)
+
+
         # Sorting
         inds, perm = torch.sort(batch.indices)
         if self._has_text_src:
